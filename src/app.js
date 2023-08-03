@@ -1,10 +1,8 @@
 import React from "react";
-
+import ItenaryClock from "./ItenaryClock/ItenaryClock";
 const App = () =>{
     return (
-        <h1>
-            Hello world! I am using React
-        </h1>
+        <ItenaryClock/>
     )
 }
 
