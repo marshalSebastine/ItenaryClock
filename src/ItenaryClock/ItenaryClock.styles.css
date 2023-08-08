@@ -1,5 +1,29 @@
+.itenaryclock_wrapper{
+    --w: 450;
+    --h: var(--w);
+    --circlerad: var(--w)/2;
+    --timerunnerw: 20;
+    --timerunnerh: var(--timerunnerw);
+}
+
+
 .itenaryclock_wrapper {
-    width: 450px;
-    height: 450px;
+    margin: auto;
+    width: calc(var(--w)*1px);
+    height:  calc(var(--h)*1px);
+    border-radius: calc((var(--w)/2) * 1px);
+    position: relative;
     background-color: black;
+}
+.timerunners{
+    height: calc(var(--timerunnerh)*1px);
+    width: calc(var(--timerunnerw)*1px);
+    border-radius: calc((var(--timerunnerh)/2)*1px);
+    background-color: red;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: calc((var(--timerunnerh)/2) * -1px);
+    z-index: 2;
 }
