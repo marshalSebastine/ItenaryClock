@@ -1,3 +1,14 @@
+@keyframes moveincricle{
+    0% {
+        transform: rotate(0deg) 
+              translateY(225px) rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg) 
+              translateY(225px) rotate(-360deg);
+    }
+}
 .itenaryclock_wrapper{
     --w: 450;
     --h: var(--w);
@@ -26,4 +37,5 @@
     left: 50%;
     margin: calc((var(--timerunnerh)/2) * -1px);
     z-index: 2;
+
 }
