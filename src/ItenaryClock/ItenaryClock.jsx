@@ -11,33 +11,47 @@ const ItenaryClock = () => {
         'play': 'running',
         'pause': 'paused',
     }
-    let playingRunnerIndex = useRef(0)
+    let playingRunnerIndex = useRef(-1)
     childrenDummyList.forEach((child,index) => {
-        defaultRunnerStates.push(animationState.pause)
+        defaultRunnerStates.push('initial')
     })
     const [runnerState,setRunnerStates] = useState(defaultRunnerStates);
 
-    function triggerAnimationState(forChildIndx,stateOfPlay) {
+    function triggerAnimationState(forChildIndx) {
             setRunnerStates(oldRunnerState => {
-                return oldRunnerState.map((state,indx) => {
-                    if(indx === forChildIndx) return stateOfPlay
-                    return state
+                let newstate =  oldRunnerState.map((state,indx) => {
+                    if(indx === forChildIndx) {
+                        let animationname = `moveincircle${indx}`;
+                        return `${animationname} 5s linear`
+                    }
+                    return 'initial'
                 })
+                console.log(newstate)
+                return(newstate)
             })
     }
-    useEffect(() => {
-        triggerAnimationState(playingRunnerIndex.current,animationState.play)
-        const playRepeater = setTimeout(() => {
-            if (playingRunnerIndex.current == 4){
-                playingRunnerIndex.current = 0
-            }else {
-                playingRunnerIndex.current += 1
+    function playRunnerAndPauseOthers(forChildIndx) {
+        childrenDummyList.forEach((child,indx) => {
+            if (indx == forChildIndx) triggerAnimationState(indx,animationState.play)
+            else{
+                triggerAnimationState(indx,animationState.pause)
             }
-            triggerAnimationState(playingRunnerIndex.current,animationState.play)
-        },5000)
-        return () => clearInterval(playRepeater);
-         
+        })
+    }
+    useEffect(() => {
+        setTimeout(() => {
+            triggerAnimationState(0)
+        },500)
+        
     }, [])
+
+    function handleAnimationEnd(evnt,indx) {
+        if(indx == numberofchildren-1){
+            triggerAnimationState(0)
+        }else{
+            triggerAnimationState(indx+1)
+        }
+    }
     return(
         <div className='itenaryclock_wrapper'>
             {childrenDummyList.map((child,index) => {
@@ -46,19 +60,22 @@ const ItenaryClock = () => {
                let keyframes =
                `@-webkit-keyframes ${animationName} {
                 0% {
-                    transform: rotate(${index*placeAtAngleGap}deg) 
-                        translateY(225px) rotate(${index*placeAtAngleGap*-1}deg);
+                    transform: rotate(${placeAtAngleGap*index}deg) 
+                        translateY(-${clockradius}px) rotate(${placeAtAngleGap*index*-1}deg);
                 }
                 100% {
-                    transform: rotate(${(index+1)*placeAtAngleGap}deg) 
-                          translateY(225px) rotate(${(index+1)*placeAtAngleGap*-1}deg);
+                    transform: rotate(${placeAtAngleGap*(index+1)}deg) 
+                          translateY(-${clockradius}px) rotate(${placeAtAngleGap*(index+1)*-1}deg);
                 }
                }`;
                styleSheet.insertRule(keyframes,styleSheet.cssRules.length)
-               let animationStyle =  {  transform: `rotate(${index*placeAtAngleGap}deg) translate(calc(var(--circlerad)*-1px)) rotate(${index*placeAtAngleGap*-1}deg)`,
-                                        animation: `${animationName} 5s linear infinite`,
-                                        animationPlayState: runnerState[index]}
-               return <div  key={index} style={animationStyle} className='timerunners'/>
+               let animationStyle =  {  transform: `rotate(${index*placeAtAngleGap}deg)
+                                                    translateY(calc(var(--circlerad)*-1px))
+                                                    rotate(${index*placeAtAngleGap*-1}deg)`,
+                                        animation: runnerState[index]}
+               return <div  key={index} style={animationStyle} 
+                            onAnimationEnd={(evnt) => {handleAnimationEnd(evnt,index)}}
+                            className='timerunners'/>
             })}           
         </div>
     )
