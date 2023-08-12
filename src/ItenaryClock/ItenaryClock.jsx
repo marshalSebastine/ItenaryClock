@@ -3,80 +3,83 @@ import './ItenaryClock.styles.css';
 
 const ItenaryClock = () => {
     let numberofchildren = 3
-    let placeAtAngleGap = 360/numberofchildren
-    let childrenDummyList = ['child1','child2','child3']
-    let clockradius = 450/2
+    let placeAtAngleGap = 360 / numberofchildren
+    let childrenDummyList = ['child1', 'child2', 'child3']
+    let clockradius = 450 / 2
     const defaultRunnerStates = []
     const animationState = {
         'play': 'running',
         'pause': 'paused',
     }
-    let playingRunnerIndex = useRef(-1)
-    childrenDummyList.forEach((child,index) => {
+    childrenDummyList.forEach((child, index) => {
         defaultRunnerStates.push('initial')
     })
-    const [runnerState,setRunnerStates] = useState(defaultRunnerStates);
+    const [runnerState, setRunnerStates] = useState(defaultRunnerStates);
 
     function triggerAnimationState(forChildIndx) {
-            setRunnerStates(oldRunnerState => {
-                let newstate =  oldRunnerState.map((state,indx) => {
-                    if(indx === forChildIndx) {
-                        let animationname = `moveincircle${indx}`;
-                        return `${animationname} 5s linear`
-                    }
-                    return 'initial'
-                })
-                console.log(newstate)
-                return(newstate)
+        setRunnerStates(oldRunnerState => {
+            let newstate = oldRunnerState.map((state, indx) => {
+                if (indx === forChildIndx) {
+                    let animationname = `moveincircle${indx}`;
+                    return `${animationname} 5s linear`
+                }
+                return 'initial'
             })
+            console.log(newstate)
+            return (newstate)
+        })
     }
     function playRunnerAndPauseOthers(forChildIndx) {
-        childrenDummyList.forEach((child,indx) => {
-            if (indx == forChildIndx) triggerAnimationState(indx,animationState.play)
-            else{
-                triggerAnimationState(indx,animationState.pause)
+        childrenDummyList.forEach((child, indx) => {
+            if (indx == forChildIndx) triggerAnimationState(indx, animationState.play)
+            else {
+                triggerAnimationState(indx, animationState.pause)
             }
         })
     }
     useEffect(() => {
         setTimeout(() => {
             triggerAnimationState(0)
-        },500)
-        
+        }, 500)
+
     }, [])
 
-    function handleAnimationEnd(evnt,indx) {
-        if(indx == numberofchildren-1){
+    function handleAnimationEnd(evnt, indx) {
+        if (indx == numberofchildren - 1) {
             triggerAnimationState(0)
-        }else{
-            triggerAnimationState(indx+1)
+        } else {
+            triggerAnimationState(indx + 1)
         }
     }
-    return(
+    return (
         <div className='itenaryclock_wrapper'>
-            {childrenDummyList.map((child,index) => {
-               let styleSheet = document.styleSheets[0];
-               let animationName = `moveincircle${index}`;
-               let keyframes =
-               `@-webkit-keyframes ${animationName} {
+            <div className='itenaryclock_innercircle'>
+                {childrenDummyList.map((child, index) => {
+                    let styleSheet = document.styleSheets[0];
+                    let animationName = `moveincircle${index}`;
+                    let keyframes =
+                        `@-webkit-keyframes ${animationName} {
                 0% {
-                    transform: rotate(${placeAtAngleGap*index}deg) 
-                        translateY(-${clockradius}px) rotate(${placeAtAngleGap*index*-1}deg);
+                    transform: rotate(${placeAtAngleGap * index}deg) 
+                        translateY(calc(var(--circlerad)* -1px)) rotate(${placeAtAngleGap * index * -1}deg);
                 }
                 100% {
-                    transform: rotate(${placeAtAngleGap*(index+1)}deg) 
-                          translateY(-${clockradius}px) rotate(${placeAtAngleGap*(index+1)*-1}deg);
+                    transform: rotate(${placeAtAngleGap * (index + 1)}deg) 
+                          translateY(calc(var(--circlerad)* -1px)) rotate(${placeAtAngleGap * (index + 1) * -1}deg);
                 }
                }`;
-               styleSheet.insertRule(keyframes,styleSheet.cssRules.length)
-               let animationStyle =  {  transform: `rotate(${index*placeAtAngleGap}deg)
+                    styleSheet.insertRule(keyframes, styleSheet.cssRules.length)
+                    let animationStyle = {
+                        transform: `rotate(${index * placeAtAngleGap}deg)
                                                     translateY(calc(var(--circlerad)*-1px))
-                                                    rotate(${index*placeAtAngleGap*-1}deg)`,
-                                        animation: runnerState[index]}
-               return <div  key={index} style={animationStyle} 
-                            onAnimationEnd={(evnt) => {handleAnimationEnd(evnt,index)}}
-                            className='timerunners'/>
-            })}           
+                                                    rotate(${index * placeAtAngleGap * -1}deg)`,
+                        animation: runnerState[index]
+                    }
+                    return <div key={index} style={animationStyle}
+                        onAnimationEnd={(evnt) => { handleAnimationEnd(evnt, index) }}
+                        className='pulsating-circle' />
+                })}
+            </div>
         </div>
     )
 }
