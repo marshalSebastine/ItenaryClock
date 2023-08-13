@@ -5,7 +5,7 @@ const ItenaryClock = () => {
     let numberofchildren = 3
     let placeAtAngleGap = 360 / numberofchildren
     let childrenDummyList = ['child1', 'child2', 'child3']
-    let clockradius = 450 / 2
+    const runnerStateIndex = useRef(0)
     const defaultRunnerStates = []
     const animationState = {
         'play': 'running',
@@ -29,14 +29,6 @@ const ItenaryClock = () => {
             return (newstate)
         })
     }
-    function playRunnerAndPauseOthers(forChildIndx) {
-        childrenDummyList.forEach((child, indx) => {
-            if (indx == forChildIndx) triggerAnimationState(indx, animationState.play)
-            else {
-                triggerAnimationState(indx, animationState.pause)
-            }
-        })
-    }
     useEffect(() => {
         setTimeout(() => {
             triggerAnimationState(0)
@@ -46,8 +38,10 @@ const ItenaryClock = () => {
 
     function handleAnimationEnd(evnt, indx) {
         if (indx == numberofchildren - 1) {
+            runnerStateIndex.current = 0
             triggerAnimationState(0)
         } else {
+            runnerStateIndex.current = (indx+1)
             triggerAnimationState(indx + 1)
         }
     }
@@ -75,9 +69,12 @@ const ItenaryClock = () => {
                                                     rotate(${index * placeAtAngleGap * -1}deg)`,
                         animation: runnerState[index]
                     }
-                    return <div key={index} style={animationStyle}
+                    return (<div key={index} style={animationStyle}
                         onAnimationEnd={(evnt) => { handleAnimationEnd(evnt, index) }}
-                        className='pulsating-circle' />
+                        className='timerunner' >
+                            <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-before': ''}/>
+                            <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-after': ''}/>
+                        </div>)
                 })}
             </div>
         </div>

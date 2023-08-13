@@ -1,4 +1,4 @@
-@keyframes moveincricle{
+/* @keyframes moveincricle{
     0% {
         transform: rotate(0deg) 
               translateY(225px) rotate(0deg);
@@ -8,7 +8,7 @@
         transform: rotate(360deg) 
               translateY(225px) rotate(-360deg);
     }
-}
+} */
 .itenaryclock_wrapper{
     --w: 450;
     --h: var(--w);
@@ -24,7 +24,7 @@
     height:  calc(var(--h)*1px);
     border-radius: calc((var(--w)/2) * 1px);
     position: relative;
-    background-color: rgb(176, 156, 123);
+    background-color: rgb(240 236 229);
     box-shadow: rgb(208, 211, 213) 3px 3px 6px 0px inset, rgba(212, 205, 205, 0.5) -3px -3px 6px 1px inset;
 }
 .itenaryclock_innercircle{
@@ -35,7 +35,9 @@
     top: 50%;
     left: 50%;
     margin: calc((var(--w)/2) * -0.95px);
-    background-color: gray;
+    background: #2C3E50;  /* fallback for old browsers */
+    background: -webkit-radial-gradient(closest-side, #FD746C, #565b60);  /* Chrome 10-25, Safari 5.1-6 */
+    background: radial-gradient(closest-side, #FD746C, #616870); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     box-shadow: rgb(218, 214, 214) 3px 3px 3px;
 }
 .timerunners{
@@ -51,13 +53,15 @@
     z-index: 2;
 
 }
-.pulsating-circle {
+.timerunner {
     position: absolute;
     left: 50%;
     top: 50%;
     height: calc(var(--timerunnerh)*1px);
     width: calc(var(--timerunnerw)*1px);
     margin: calc((var(--timerunnerh)/2) * -1px);
+    border-radius: calc(var(--timerunnerh)/2 * 1px);
+    background-color: #FD746C;
     z-index: 2;
   }
   
@@ -81,7 +85,7 @@
       transform: scale(.8);
     }
   }
-  .pulsating-circle::before {
+  .pulsating-circle-before {
     content: '';
     position: relative;
     display: block;
@@ -91,10 +95,10 @@
     margin-left: -50%;
     margin-top: -50%;
     border-radius: 45px;
-    background-color: #d3e935;
+    background-color: #FD746C;
     animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   }
-  .pulsating-circle::after {
+  .pulsating-circle-after {
     content: '';
     position: absolute;
     left: 0; 
@@ -102,7 +106,7 @@
     display: block;
     width: 90%;
     height: 90%;
-    background-color: #D4F576;
+    background-color: #FD746C;
     border-radius: 15px;
     box-shadow: 0 0 8px rgba(0,0,0,.3);
     animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
