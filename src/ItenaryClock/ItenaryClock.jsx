@@ -1,16 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
 import './ItenaryClock.styles.css';
 
+// check whether yout slide is currently displayed by checking presentSlide === slideIndex
+const Session = ({presentSlide,slideIndex, heading}) => {
+   
+    return(
+        <div  style={(presentSlide === slideIndex) ? {animation: 'slowlyappear 1s forwards'} : {opacity: 0}}
+              className='session-wrapper'>
+            <p className='session-time'> 8:00 <span className='session-am-pm'>am</span></p>
+            <span className='session-heading'>{heading} </span>
+            <ul className='session-todo-list'>
+                <li key={1}>take out leaves</li>
+            </ul>
+        </div>
+    )
+}
+
+
+
+
 const ItenaryClock = () => {
     let numberofchildren = 3
     let placeAtAngleGap = 360 / numberofchildren
     let childrenDummyList = ['child1', 'child2', 'child3']
-    const runnerStateIndex = useRef(0)
+    let runnerStateIndex = useRef(0)
     const defaultRunnerStates = []
-    const animationState = {
+    const animationStatus = {
         'play': 'running',
         'pause': 'paused',
     }
+    const [animationState,setAnimationState] = useState(true)
+
     childrenDummyList.forEach((child, index) => {
         defaultRunnerStates.push('initial')
     })
@@ -25,7 +45,6 @@ const ItenaryClock = () => {
                 }
                 return 'initial'
             })
-            console.log(newstate)
             return (newstate)
         })
     }
@@ -41,9 +60,13 @@ const ItenaryClock = () => {
             runnerStateIndex.current = 0
             triggerAnimationState(0)
         } else {
-            runnerStateIndex.current = (indx+1)
+            runnerStateIndex.current = (indx + 1)
             triggerAnimationState(indx + 1)
         }
+    }
+
+    function handleContentClick(evnt,index) {
+            setAnimationState(!animationState)
     }
     return (
         <div className='itenaryclock_wrapper'>
@@ -67,13 +90,21 @@ const ItenaryClock = () => {
                         transform: `rotate(${index * placeAtAngleGap}deg)
                                                     translateY(calc(var(--circlerad)*-1px))
                                                     rotate(${index * placeAtAngleGap * -1}deg)`,
-                        animation: runnerState[index]
+                        animation: runnerState[index],
+                        animationPlayState: (animationState) ? animationStatus.play : animationStatus.pause
                     }
-                    return (<div key={index} style={animationStyle}
-                        onAnimationEnd={(evnt) => { handleAnimationEnd(evnt, index) }}
-                        className='timerunner' >
-                            <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-before': ''}/>
-                            <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-after': ''}/>
+                    return (
+                        <div key={index}>
+                            <div style={animationStyle}
+                                onAnimationEnd={(evnt) => { handleAnimationEnd(evnt, index) }}
+                                className='timerunner' >
+                                <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-before' : ''} />
+                                <div className={(runnerStateIndex.current === index) ? 'pulsating-circle-after' : ''} />
+                            </div>
+                            <div onClick={handleContentClick} className='clockcontent-container'>
+                                <Session presentSlide={runnerStateIndex.current} heading={child}
+                                         slideIndex={index}/>
+                            </div>
                         </div>)
                 })}
             </div>
