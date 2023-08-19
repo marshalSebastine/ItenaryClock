@@ -35,7 +35,6 @@
     top: 50%;
     left: 50%;
     margin: calc((var(--w)/2) * -0.95px);
-    transition: all 6s linear;
     background: #2C3E50;  /* fallback for old browsers */
     background: -webkit-radial-gradient(closest-side, #FD746C, #565b60);  /* Chrome 10-25, Safari 5.1-6 */
     background: radial-gradient(closest-side, #FD746C, #616870); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -45,14 +44,14 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    cursor: pointer;
     height: calc(var(--timerunnerh)*1px);
     width: calc(var(--timerunnerw)*1px);
     margin: calc((var(--timerunnerh)/2) * -1px);
     border-radius: calc(var(--timerunnerh)/2 * 1px);
-    background-color: #FD746C;
-    opacity: 0.95;
     z-index: 2;
   }
+
   .clockcontent-container{
     width: calc(var(--w)*0.67*1px);
     height:  calc(var(--w)*0.67*1px);
@@ -112,6 +111,16 @@
     animation: pulse-dot 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
   }
 
+  @media only screen and (max-width: 450px) {
+    .itenaryclock_wrapper{
+      --w: 340
+    }
+  }
+  @media (min-width: 550px) {
+    .itenaryclock_wrapper{
+      --w: 520
+    }
+  }
 
   /* session styles */
 
@@ -124,6 +133,7 @@
     justify-content: flex-start;
     box-sizing: border-box;
     align-items: center;
+    text-align: center;
     gap: 14px;
   }
   .session-time{
