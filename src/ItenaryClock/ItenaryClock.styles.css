@@ -35,6 +35,7 @@
     top: 50%;
     left: 50%;
     margin: calc((var(--w)/2) * -0.95px);
+    transition: all 6s linear;
     background: #2C3E50;  /* fallback for old browsers */
     background: -webkit-radial-gradient(closest-side, #FD746C, #565b60);  /* Chrome 10-25, Safari 5.1-6 */
     background: radial-gradient(closest-side, #FD746C, #616870); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -49,6 +50,7 @@
     margin: calc((var(--timerunnerh)/2) * -1px);
     border-radius: calc(var(--timerunnerh)/2 * 1px);
     background-color: #FD746C;
+    opacity: 0.95;
     z-index: 2;
   }
   .clockcontent-container{
@@ -94,8 +96,7 @@
     margin-left: -50%;
     margin-top: -50%;
     border-radius: 45px;
-    background-color: #FD746C;
-    animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation: pulse-ring 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   }
   .pulsating-circle-after {
     content: '';
@@ -105,10 +106,10 @@
     display: block;
     width: 90%;
     height: 90%;
-    background-color: #FD746C;
     border-radius: 15px;
+    opacity: 0.95;
     box-shadow: 0 0 8px rgba(0,0,0,.3);
-    animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
+    animation: pulse-dot 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
   }
 
 
